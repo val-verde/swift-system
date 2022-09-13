@@ -8,6 +8,7 @@ See https://swift.org/LICENSE.txt for license information
 #]]
 
 add_library(SystemPackage
+  SHARED
   Errno.swift
   FileDescriptor.swift
   FileHelpers.swift
