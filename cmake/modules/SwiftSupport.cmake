@@ -1,12 +1,3 @@
-#[[
-This source file is part of the Swift System open source project
-
-Copyright (c) 2020 Apple Inc. and the Swift System project authors
-Licensed under Apache License v2.0 with Runtime Library Exception
-
-See https://swift.org/LICENSE.txt for license information
-#]]
-
 # Returns the architecture name in a variable
 #
 # Usage:
@@ -17,11 +8,12 @@ See https://swift.org/LICENSE.txt for license information
 function(get_swift_host_arch result_var_name)
   if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64")
     set("${result_var_name}" "x86_64" PARENT_SCOPE)
-  elseif ("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "AArch64|aarch64|arm64")
-    if(CMAKE_SYSTEM_NAME MATCHES Darwin)
-      set("${result_var_name}" "arm64" PARENT_SCOPE)
-    else()
+  elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|ARM64|arm64")
+    if(NOT DEFINED CMAKE_OSX_DEPLOYMENT_TARGET OR
+        "${CMAKE_OSX_DEPLOYMENT_TARGET}" STREQUAL "")
       set("${result_var_name}" "aarch64" PARENT_SCOPE)
+    else()
+      set("${result_var_name}" "arm64" PARENT_SCOPE)
     endif()
   elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "ppc64")
     set("${result_var_name}" "powerpc64" PARENT_SCOPE)
@@ -31,9 +23,9 @@ function(get_swift_host_arch result_var_name)
     set("${result_var_name}" "s390x" PARENT_SCOPE)
   elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "armv6l")
     set("${result_var_name}" "armv6" PARENT_SCOPE)
-  elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "armv7l")
+  elseif("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "armv7-a|armv7a")
     set("${result_var_name}" "armv7" PARENT_SCOPE)
-  elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "armv7-a")
+  elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "armv7l")
     set("${result_var_name}" "armv7" PARENT_SCOPE)
   elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "amd64")
     set("${result_var_name}" "amd64" PARENT_SCOPE)
@@ -43,7 +35,7 @@ function(get_swift_host_arch result_var_name)
     set("${result_var_name}" "itanium" PARENT_SCOPE)
   elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86")
     set("${result_var_name}" "i686" PARENT_SCOPE)
-  elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "i686")
+  elseif("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "i386|i486|i586|i686|i786")
     set("${result_var_name}" "i686" PARENT_SCOPE)
   else()
     message(FATAL_ERROR "Unrecognized architecture on host system: ${CMAKE_SYSTEM_PROCESSOR}")
@@ -91,10 +83,17 @@ function(_install_target module)
     set(module_name ${module})
   endif()
 
-  install(FILES $<TARGET_PROPERTY:${module},Swift_MODULE_DIRECTORY>/${module_name}.swiftdoc
-    DESTINATION lib/${swift}/${swift_os}/${module_name}.swiftmodule
-    RENAME ${swift_arch}.swiftdoc)
-  install(FILES $<TARGET_PROPERTY:${module},Swift_MODULE_DIRECTORY>/${module_name}.swiftmodule
-    DESTINATION lib/${swift}/${swift_os}/${module_name}.swiftmodule
-    RENAME ${swift_arch}.swiftmodule)
+  if(CMAKE_SYSTEM_NAME STREQUAL Darwin)
+    install(FILES $<TARGET_PROPERTY:${module},Swift_MODULE_DIRECTORY>/${module_name}.swiftdoc
+      DESTINATION lib/${swift}/${swift_os}/${module_name}.swiftmodule
+      RENAME ${swift_arch}.swiftdoc)
+    install(FILES $<TARGET_PROPERTY:${module},Swift_MODULE_DIRECTORY>/${module_name}.swiftmodule
+      DESTINATION lib/${swift}/${swift_os}/${module_name}.swiftmodule
+      RENAME ${swift_arch}.swiftmodule)
+  else()
+    install(FILES
+      $<TARGET_PROPERTY:${module},Swift_MODULE_DIRECTORY>/${module_name}.swiftdoc
+      $<TARGET_PROPERTY:${module},Swift_MODULE_DIRECTORY>/${module_name}.swiftmodule
+      DESTINATION lib/${swift}/${swift_os}/${swift_arch})
+  endif()
 endfunction()
