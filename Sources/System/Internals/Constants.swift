@@ -20,7 +20,8 @@ import Glibc
 public let O_ACCMODE = CInt(3)
 #elseif os(Windows)
 import CSystem
-import ucrt
+import CRT
+import WinSDK
 #else
 #error("Unsupported Platform")
 #endif

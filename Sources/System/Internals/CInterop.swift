@@ -25,7 +25,8 @@ import Glibc
 typealias off_t = Int
 #elseif os(Windows)
 import CSystem
-import ucrt
+import CRT
+import WinSDK
 #else
 #error("Unsupported Platform")
 #endif

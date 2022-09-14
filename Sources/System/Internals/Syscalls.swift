@@ -12,7 +12,8 @@ import Darwin
 #elseif os(Linux) || os(Musl) || os(FreeBSD) || os(Android)
 import Glibc
 #elseif os(Windows)
-import ucrt
+import CRT
+import WinSDK
 #else
 #error("Unsupported Platform")
 #endif

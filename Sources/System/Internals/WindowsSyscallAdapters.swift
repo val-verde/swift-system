@@ -9,7 +9,7 @@
 
 #if os(Windows)
 
-import ucrt
+import CRT
 import WinSDK
 
 @inline(__always)

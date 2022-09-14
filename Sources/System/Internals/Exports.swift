@@ -22,7 +22,8 @@ import Glibc
 import Glibc
 #elseif os(Windows)
 import CSystem
-import ucrt
+import CRT
+import WinSDK
 #else
 #error("Unsupported Platform")
 #endif
