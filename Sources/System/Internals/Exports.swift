@@ -17,6 +17,9 @@ import Darwin
 #elseif os(Linux) || os(FreeBSD) || os(Android)
 @_implementationOnly import CSystem
 import Glibc
+#elseif os(Musl)
+@_implementationOnly import CSystem
+import Glibc
 #elseif os(Windows)
 import CSystem
 import ucrt

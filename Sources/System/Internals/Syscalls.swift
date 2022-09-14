@@ -9,7 +9,7 @@
 
 #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
 import Darwin
-#elseif os(Linux) || os(FreeBSD) || os(Android)
+#elseif os(Linux) || os(Musl) || os(FreeBSD) || os(Android)
 import Glibc
 #elseif os(Windows)
 import ucrt
