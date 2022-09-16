@@ -12,6 +12,8 @@
 import CRT
 import WinSDK
 
+let _SH_DENYNO = Int32(0x40)
+
 @inline(__always)
 internal func open(
   _ path: UnsafePointer<CInterop.PlatformChar>, _ oflag: Int32
