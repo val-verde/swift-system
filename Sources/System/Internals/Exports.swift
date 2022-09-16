@@ -42,11 +42,11 @@ internal var system_errno: CInt {
   get {
     var value: CInt = 0
     // TODO(compnerd) handle the error?
-    _ = ucrt._get_errno(&value)
+    _ = CRT._get_errno(&value)
     return value
   }
   set {
-    _ = ucrt._set_errno(newValue)
+    _ = CRT._set_errno(newValue)
   }
 }
 #else
