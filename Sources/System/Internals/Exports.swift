@@ -153,7 +153,7 @@ internal func makeTLSKey() -> _PlatformTLSKey {
 }
 internal func setTLS(_ key: _PlatformTLSKey, _ p: UnsafeMutableRawPointer?) {
   #if os(Windows)
-  guard FlsSetValue(key, p) else {
+  guard FlsSetValue(key, p) != 0 else {
     fatalError("Unable to set TLS")
   }
   #else

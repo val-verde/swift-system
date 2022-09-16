@@ -75,7 +75,7 @@ internal func pread(
   ovlOverlapped.Offset = DWORD(UInt32(offset >> 0) & 0xffffffff)
 
   var nNumberOfBytesRead: DWORD = 0
-  if !ReadFile(hFile, buf, DWORD(nbyte), &nNumberOfBytesRead, &ovlOverlapped) {
+  if ReadFile(hFile, buf, DWORD(nbyte), &nNumberOfBytesRead, &ovlOverlapped) == 0 {
     let _ = GetLastError()
     // TODO(compnerd) map windows error to errno
     return Int(-1)
@@ -98,8 +98,8 @@ internal func pwrite(
   ovlOverlapped.Offset = DWORD(UInt32(offset >> 0) & 0xffffffff)
 
   var nNumberOfBytesWritten: DWORD = 0
-  if !WriteFile(hFile, buf, DWORD(nbyte), &nNumberOfBytesWritten,
-                &ovlOverlapped) {
+  if WriteFile(hFile, buf, DWORD(nbyte), &nNumberOfBytesWritten,
+               &ovlOverlapped) == 0 {
     let _ = GetLastError()
     // TODO(compnerd) map windows error to errno
     return Int(-1)
