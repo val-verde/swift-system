@@ -14,6 +14,9 @@ import PackageDescription
 
 let package = Package(
     name: "swift-system",
+    platforms: [
+        .macOS(.v12),
+    ],
     products: [
         .library(name: "SystemPackage", targets: ["SystemPackage"]),
     ],
